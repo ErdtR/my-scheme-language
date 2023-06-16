@@ -24,4 +24,56 @@ describe("tokenize", () => {
 
     expect(result).toStrictEqual(expectedResults);
   });
+
+  it("should be able to tokenize single-digit number and letters", () => {
+    const result = tokenize("(a 1 2)");
+    const expectedResults = [
+      { type: "Parenthesis", value: "(" },
+      { type: "Name", value: "a" },
+      { type: "Number", value: 1 },
+      { type: "Number", value: 2 },
+      { type: "Parenthesis", value: ")" },
+    ];
+
+    expect(result).toStrictEqual(expectedResults);
+  });
+
+  it("should be able to tokenize multi-digit numbers", () => {
+    const result = tokenize("(a 10 20)");
+    const expectedResults = [
+      { type: "Parenthesis", value: "(" },
+      { type: "Name", value: "a" },
+      { type: "Number", value: 10 },
+      { type: "Number", value: 20 },
+      { type: "Parenthesis", value: ")" },
+    ];
+
+    expect(result).toStrictEqual(expectedResults);
+  });
+
+  it("should be able to tokenize multi-digit symbols", () => {
+    const result = tokenize("(abc 1 2)");
+    const expectedResults = [
+      { type: "Parenthesis", value: "(" },
+      { type: "Name", value: "abc" },
+      { type: "Number", value: 1 },
+      { type: "Number", value: 2 },
+      { type: "Parenthesis", value: ")" },
+    ];
+
+    expect(result).toStrictEqual(expectedResults);
+  });
+
+  it("should be able to tokenize string", () => {
+    const result = tokenize(`(a "test1" "test2")`);
+    const expectedResults = [
+      { type: "Parenthesis", value: "(" },
+      { type: "Name", value: "a" },
+      { type: "String", value: "test1" },
+      { type: "String", value: "test2" },
+      { type: "Parenthesis", value: ")" },
+    ];
+
+    expect(result).toStrictEqual(expectedResults);
+  });
 });

@@ -1,4 +1,10 @@
-const { isParenthesis, isWhitespace } = require("./indentify");
+const {
+  isParenthesis,
+  isWhitespace,
+  isNumber,
+  isLetter,
+  isQuote,
+} = require("./indentify");
 
 const tokenize = (input) => {
   const tokens = [];
@@ -18,6 +24,43 @@ const tokenize = (input) => {
       cursor++;
       continue;
     }
+
+    if (isNumber(character)) {
+      let number = character;
+
+      while (isNumber(input[++cursor])) {
+        number += input[cursor];
+      }
+
+      tokens.push({ type: "Number", value: parseInt(number, 10) });
+      continue;
+    }
+
+    if (isLetter(character)) {
+      let symbol = character;
+
+      while (isLetter(input[++cursor])) {
+        symbol += input[cursor];
+      }
+
+      tokens.push({ type: "Name", value: symbol });
+      continue;
+    }
+
+    if (isQuote(character)) {
+      let symbol = "";
+
+      while (!isQuote(input[++cursor])) {
+        symbol += input[cursor];
+      }
+
+      tokens.push({ type: "String", value: symbol });
+
+      cursor++;
+      continue;
+    }
+
+    throw new Error(`${cursor} is not valid`);
   }
 
   return tokens;
